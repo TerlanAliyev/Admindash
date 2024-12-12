@@ -1,0 +1,233 @@
+﻿<style>
+    body {
+        background-color: #f8f9fe;
+    }
+
+    .table-container {
+        padding: 20px;
+    }
+
+    .status.active {
+        color: #28a745;
+        font-weight: bold;
+    }
+
+    .status.inactive {
+        color: #dc3545;
+        font-weight: bold;
+    }
+</style>
+
+
+<main class="main-content position-relative border-radius-lg">
+
+    <div class="container-fluid py-4 ">
+        <div class="row d-flex justify-content-center">
+            <div class="col-xl-12 col-sm-6 mb-xl-0 mb-4  d-flex align-content-center justify-content-around">
+                <div class="card col-3">
+                    <div class="card-body p-3">
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="numbers ">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Azerbaycan dilinde</p>
+                                    <h5 class="font-weight-bolder">
+                                        @ViewData["NewsCountAze"]
+                                    </h5>
+
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
+                                    <i class="fa-solid fa-newspaper"></i>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card col-3">
+                    <div class="card-body p-3">
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="numbers ">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Ingilis dilinde</p>
+                                    <h5 class="font-weight-bolder">
+                                        @ViewData["NewsCountEng"]
+                                    </h5>
+
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
+                                    <i class="fa-solid fa-newspaper"></i>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card col-3">
+                    <div class="card-body p-3">
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="numbers ">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Rus dilinde</p>
+                                    <h5 class="font-weight-bolder">
+                                        @ViewData["NewsCountRus"]
+                                    </h5>
+
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
+                                    <i class="fa-solid fa-newspaper"></i>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</main>
+<br />
+<br />
+<div class="container-fluid py-4 ">
+    <div class="row d-flex justify-content-center">
+        <a href="/Home/PostNews"> Xeber Elave et</a>
+
+        <div class="container mt-4">
+            <h1 class="text-center mb-4">Haberler Yönetimi</h1>
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Haberler Tablosu</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Başlıq</th>
+                                    <th scope="col">Sekil</th>
+                                    <th scope="col">Tarix</th>
+                                    <th scope="col">Admin</th>
+                                    <th scope="col">Muxbir</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Emeliyyatlar</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.5/perfect-scrollbar.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+    const apiUrl = "https://localhost:44314/api/news/admin/0";
+    const tableBody = document.querySelector("tbody");
+    const pageNumber = 0;
+    const startDate = "2024-12-01";
+    const endDate = "2024-12-31";
+
+    function fetchNews(page) {
+        const url = new URL(apiUrl + page);
+        if (startDate) url.searchParams.append("startDate", startDate);
+        if (endDate) url.searchParams.append("endDate", endDate);
+
+        fetch(url)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Haberler getirilemedi");
+                }
+                return response.json();
+            })
+            .then((newsItems) => {
+                newsItems.forEach((newsItem, index) => {
+                    console.log(newsItem.newsPhotos[0]?.photoUrl);
+
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                                    <td>${index + 1 + page * 2}</td>
+                                    <td>${newsItem.newsTitle}</td>
+                                    <td>
+                                              ${newsItem.newsPhotos?.length > 0 ? `
+      <img src="${newsItem.newsPhotos[0]?.photoUrl}" alt="Haber Fotoğrafı" style="width: 50px; height: 50px; object-fit: cover;">
+    ` : "Fotoğraf Yok"}
+
+                                    </td>
+                                    <td>${new Date(newsItem.newsDate).toLocaleDateString()}</td>
+                                        <td>${newsItem.newsAdmin?.userName || "Bilinmiyor"}</td>
+                                    <td>${newsItem.newsOwner?.ownerName || "Bilinmiyor"}</td>
+                                    <td>
+                                      <span class="status ${newsItem.newsVisibility ? "active" : "inactive"}">
+                                            ${newsItem.newsVisibility ? "Aktif" : "Pasif"}
+                                      </span>
+                                    </td>
+                                    <td>
+                                      <a href="#" class="text-dark me-2">
+                                        <i class="fa-solid fa-eye"></i>
+                                      </a>
+                                      <a href="#" class="text-primary me-2">
+                                        <i class="fa-solid fa-pen"></i>
+                                      </a>
+                                      <a href="javascript:void(0);" class="text-danger deleteNews" data-id="${newsItem.newsId}">
+                                        <i class="fa-solid fa-trash"></i>
+                                      </a>
+                                    </td>
+                                  `;
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch((error) => {
+                console.error("Hata:", error);
+            });
+    }
+
+    fetchNews(pageNumber);
+
+    document.addEventListener("click", function (e) {
+        if (e.target.closest(".deleteNews")) {
+            const newsId = e.target.closest(".deleteNews").getAttribute("data-id");
+
+            if (confirm("Bu haberi silmek istediğinize emin misiniz?")) {
+                fetch(`/api/news/id/${newsId}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+                    .then((response) => {
+                        if (response.ok) {
+                            alert("Haber başarıyla silindi!");
+                            location.reload();
+                        } else {
+                            alert("Haber silinirken bir hata oluştu.");
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Hata:", error);
+                    }); // Eksik parantez ve blok kapama burada düzeltildi
+            }
+        }
+    });
+
+</script>

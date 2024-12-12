@@ -1,0 +1,67 @@
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\Argon.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\Argon.AssemblyInfoInputs.cache
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\Argon.AssemblyInfo.cs
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\Argon.csproj.CoreCompileInputs.cache
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\Argon.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\Argon.RazorAssemblyInfo.cache
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\Argon.RazorAssemblyInfo.cs
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\bin\Debug\net8.0\appsettings.Development.json
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\bin\Debug\net8.0\appsettings.json
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\bin\Debug\net8.0\Argon.staticwebassets.runtime.json
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\bin\Debug\net8.0\Argon.staticwebassets.endpoints.json
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\bin\Debug\net8.0\Argon.exe
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\bin\Debug\net8.0\Argon.deps.json
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\bin\Debug\net8.0\Argon.runtimeconfig.json
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\bin\Debug\net8.0\Argon.dll
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\bin\Debug\net8.0\Argon.pdb
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\scopedcss\bundle\Argon.styles.css
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\scopedcss\projectbundle\Argon.bundle.scp.css
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\staticwebassets.development.json
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\staticwebassets\msbuild.Argon.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\staticwebassets\msbuild.Argon.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\staticwebassets\msbuild.build.Argon.props
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.Argon.props
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.Argon.props
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\staticwebassets.pack.json
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\Argon.dll
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\refint\Argon.dll
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\Argon.pdb
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\Argon.genruntimeconfig.cache
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\ref\Argon.dll
+C:\Users\Terlan Aliyev\source\repos\Argon\Argon\obj\Debug\net8.0\scopedcss\Views\Shared\_Sidebar.cshtml.rz.scp.css
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\bin\Debug\net8.0\appsettings.Development.json
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\bin\Debug\net8.0\appsettings.json
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\bin\Debug\net8.0\Argon.staticwebassets.runtime.json
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\bin\Debug\net8.0\Argon.exe
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\bin\Debug\net8.0\Argon.deps.json
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\bin\Debug\net8.0\Argon.runtimeconfig.json
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\bin\Debug\net8.0\Argon.dll
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\bin\Debug\net8.0\Argon.pdb
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\Argon.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\Argon.AssemblyInfoInputs.cache
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\Argon.AssemblyInfo.cs
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\Argon.csproj.CoreCompileInputs.cache
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\Argon.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\Argon.RazorAssemblyInfo.cache
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\Argon.RazorAssemblyInfo.cs
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\Argon.sourcelink.json
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\staticwebassets.development.json
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\staticwebassets\msbuild.Argon.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\staticwebassets\msbuild.build.Argon.props
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.Argon.props
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.Argon.props
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\staticwebassets.pack.json
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\scopedcss\Views\Shared\_Sidebar.cshtml.rz.scp.css
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\scopedcss\bundle\Argon.styles.css
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\scopedcss\projectbundle\Argon.bundle.scp.css
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\Argon.dll
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\refint\Argon.dll
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\Argon.pdb
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\Argon.genruntimeconfig.cache
+C:\Users\Terlan\Desktop\12.12\Argondashboard\Argon\obj\Debug\net8.0\ref\Argon.dll

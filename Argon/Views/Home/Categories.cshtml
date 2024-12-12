@@ -1,0 +1,107 @@
+﻿<main class="main-content position-relative border-radius-lg">
+
+    <div class="container-fluid py-4 ">
+        <div class="row d-flex justify-content-center">
+            <div class="col-xl-12 col-sm-6 mb-xl-0 mb-4  d-flex align-content-center justify-content-around">
+                <div class="card col-3">
+                    <div class="card-body p-3">
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="numbers ">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Azerbaycan dilinde</p>
+                                    <h5 class="font-weight-bolder">
+                                        @ViewData["CategoryCountAze"]
+                                    </h5>
+
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
+                                    <i class="fa-solid fa-list"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card col-3">
+                    <div class="card-body p-3">
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="numbers ">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Ingilis dilinde</p>
+                                    <h5 class="font-weight-bolder">
+                                        @ViewData["CategoryCountEng"]
+                                    </h5>
+
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
+                                    <i class="fa-solid fa-list"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card col-3">
+                    <div class="card-body p-3">
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="numbers ">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Rus dilinde</p>
+                                    <h5 class="font-weight-bolder">
+                                        @ViewData["CategoryCountRus"]
+                                    </h5>
+
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
+                                    <i class="fa-solid fa-list"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <a href="/Home/PostCategory" style="color:white;"> Category Elave et</a>
+
+</main>
+<section class="other" style="margin-top:100px;">
+    <div class="container-fluid py-4">
+        <div class="row">
+            @foreach (var category in (List<Argon.Models.CategoryNews>)ViewData["CategoryNewsList"])
+            {
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <span class="text-success text-sm font-weight-bolder">@category.CategoryName</span>
+                                            
+                                       
+                                        <p class="mb-0">
+                                            kateqoriyasina aid xeber sayi
+                                        </p>
+                                        <h5 class="font-weight-bolder">
+                                            @category.NewsCount
+                                        </h5>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
+                                        <i class="fa-solid fa-list"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
