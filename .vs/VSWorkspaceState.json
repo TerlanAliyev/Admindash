@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Argon",
+    "\\Argon\\Views",
+    "\\Argon\\Views\\Shared"
   ],
-  "SelectedNode": "\\Argon.sln",
+  "SelectedNode": "\\Argon\\Views\\Shared\\_Sidebar.cshtml",
   "PreviewInSolutionExplorer": false
 }

@@ -152,10 +152,10 @@
                    min="0"
                    max="5" />
 
-            <label for="newsDate">Teqler:</label>
+            @* <label for="newsDate">Teqler:</label>
             <div id="tag-container">
                 <input name="newsTags" type="text" id="tag-input" placeholder="Etiket yazın ve Enter’a basın..." />
-            </div>
+            </div> *@
 
             <!-- Haber Yayın Tarihi -->
             <label for="newsDate">Haber Yayın Tarihi:</label>
@@ -177,58 +177,58 @@
 
 <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const tagContainer = document.getElementById("tag-container");
-        const tagInput = document.getElementById("tag-input");
-        const tags = [];
+    // document.addEventListener("DOMContentLoaded", () => {
+    //     const tagContainer = document.getElementById("tag-container");
+    //     const tagInput = document.getElementById("tag-input");
+    //     const tags = [];
 
-        // Etiket ekleme
-        tagInput.addEventListener("keydown", (event) => {
-            if (event.key === "Enter" && tagInput.value.trim() !== "") {
-                event.preventDefault();
-                const tagValue = tagInput.value.trim();
-                tags.push(tagValue);
-                console.log(tags)
-                const tagElement = document.createElement("div");
-                tagElement.classList.add("tag");
-                tagElement.innerHTML = `${tagValue} <span>&times;</span>`;
+    //     // Etiket ekleme
+    //     tagInput.addEventListener("keydown", (event) => {
+    //         if (event.key === "Enter" && tagInput.value.trim() !== "") {
+    //             event.preventDefault();
+    //             const tagValue = tagInput.value.trim();
+    //             tags.push(tagValue);
+    //             console.log(tags)
+    //             const tagElement = document.createElement("div");
+    //             tagElement.classList.add("tag");
+    //             tagElement.innerHTML = `${tagValue} <span>&times;</span>`;
 
-                tagContainer.insertBefore(tagElement, tagInput);
-                tagInput.value = "";
+    //             tagContainer.insertBefore(tagElement, tagInput);
+    //             tagInput.value = "";
 
-                // Etiket silme işlevi
-                tagElement.querySelector("span").addEventListener("click", () => {
-                    tagContainer.removeChild(tagElement);
-                    const index = tags.indexOf(tagValue);
-                    if (index !== -1) {
-                        tags.splice(index, 1);
-                    }
-                });
-            }
-        });
+    //             // Etiket silme işlevi
+    //             tagElement.querySelector("span").addEventListener("click", () => {
+    //                 tagContainer.removeChild(tagElement);
+    //                 const index = tags.indexOf(tagValue);
+    //                 if (index !== -1) {
+    //                     tags.splice(index, 1);
+    //                 }
+    //             });
+    //         }
+    //     });
 
-        // Form submit sırasında etiketleri backend'e göndermek için
-        document.querySelector("form").addEventListener("submit", function (e) {
-            e.preventDefault(); // Formun normal gönderimini engelle
+    //     // Form submit sırasında etiketleri backend'e göndermek için
+    //     document.querySelector("form").addEventListener("submit", function (e) {
+    //         e.preventDefault(); // Formun normal gönderimini engelle
 
-            const formData = new FormData(this);
-            formData.append("Tags", JSON.stringify(tags));  // Etiketleri JSON formatında gönder
+    //         const formData = new FormData(this);
+    //         formData.append("Tags", JSON.stringify(tags));  // Etiketleri JSON formatında gönder
 
-            fetch('https://localhost:44314/api/news', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(result => {
-                    console.log(result); // Başarı durumunda sonucu konsola yazdır
-                    alert("Başarılı: " + JSON.stringify(result));
-                })
-                .catch(error => {
-                    console.error("Hata oluştu:", error);
-                    alert("Hata: " + error.message);
-                });
-        });
-    });
+    //         fetch('https://localhost:44314/api/news', {
+    //             method: 'POST',
+    //             body: formData
+    //         })
+    //             .then(response => response.json())
+    //             .then(result => {
+    //                 console.log(result); // Başarı durumunda sonucu konsola yazdır
+    //                 alert("Başarılı: " + JSON.stringify(result));
+    //             })
+    //             .catch(error => {
+    //                 console.error("Hata oluştu:", error);
+    //                 alert("Hata: " + error.message);
+    //             });
+    //     });
+    // });
 
 
 

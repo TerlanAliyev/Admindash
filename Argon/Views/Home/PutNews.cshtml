@@ -1,0 +1,272 @@
+﻿@{
+    ViewData["ShowNavbar"] = false;  // Navbar'ı engelle
+}
+
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css"
+      rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.bubble.css"
+      rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.core.css"
+      rel="stylesheet" />
+<style>
+    #editor {
+        height: 300px;
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+
+    #toolbar {
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f9;
+        color: #333;
+    }
+
+    header {
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+    }
+
+    main {
+        padding: 20px;
+        margin: auto;
+        s background-color: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    form {
+        margin-top: 20px;
+    }
+
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        form input,
+        form textarea,
+        form select,
+        form button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        form textarea {
+            resize: vertical;
+            height: 150px;
+        }
+
+        form button {
+            background-color: #0078d7;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+            form button:hover {
+                background-color: #005bb5;
+            }
+
+    .form-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .form-container input[type="file"] {
+            padding: 5px;
+            background-color: #fafafa;
+        }
+
+            .form-container input[type="file"]:hover {
+                background-color: #f0f0f0;
+            }
+</style>
+
+<header>
+    <h1>Haber Güncelle</h1>
+</header>
+<main>
+    <form id="newsForm" method="post" enctype="multipart/form-data">
+        <div class="form-container">
+            <!-- Haber Başlığı -->
+            <label for="newsTitle">Haber Başlığı:</label>
+            <input value="" type="text" id="newsTitle" name="NewsTitle" required />
+
+            <!-- Quill Editor -->
+            <label for="newsContent">Haber İçeriği:</label>
+            <div id="toolbar">
+                <select class="ql-font"></select>
+                <select class="ql-size"></select>
+                <button class="ql-bold"></button>
+                <button class="ql-italic"></button>
+                <button class="ql-underline"></button>
+                <button class="ql-strike"></button>
+                <select class="ql-color"></select>
+                <select class="ql-background"></select>
+                <button class="ql-link"></button>
+                <button class="ql-image"></button>
+                <button class="ql-list" value="ordered"></button>
+                <button class="ql-list" value="bullet"></button>
+            </div>
+            <div id="editor"></div>
+            <label for="newsLangId">Dil ID:</label>
+            <select id="newsLangId" name="NewsLangId">
+                <option value="">Dil Seçin</option>
+            </select>
+
+            <label for="newsCategoryId">Kategori ID:</label>
+            <select id="newsCategoryId" name="NewsCategoryId">
+                <option value="">Kategori Seçin</option>
+            </select>
+
+            <label for="newsOwnerId">Sahip ID:</label>
+            <input type="number" id="newsOwnerId" name="NewsOwnerId" />
+
+            <label for="newsAdminId">Admin ID:</label>
+            <input type="number" id="newsAdminId" name="NewsAdminId" />
+
+            <label for="newsRating">Haber Puanı:</label>
+            <input type="number" id="newsRating" name="NewsRating" min="0" max="5" />
+
+            @* <label for="newsDate">Haber Yayın Tarihi:</label>
+            <input type="datetime-local" id="newsDate" name="NewsDate" /> *@
+
+            <label for="newsYoutubeLink">YouTube Link:</label>
+            <input type="url" id="newsYoutubeLink" name="NewsYoutubeLink" />
+
+            <label for="newsPhotos">Haber Fotoğrafları:</label>
+            <input type="file" id="newsPhotos" name="NewsPhotos" multiple />
+
+            <label for="newsVideos">Haber Videoları:</label>
+            <input type="file" id="newsVideos" name="NewsVideos" multiple />
+
+            <button type="submit">Güncelle</button>
+        </div>
+    </form>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // URL'den newsId al
+        const pathParts = window.location.pathname.split('/');
+        const newsId = pathParts[pathParts.length - 1]; // newsId'yi URL yolundan al
+        const apiUrl = `https://localhost:44314/api/news/id/${newsId}`; // API URL'si
+
+        console.log("API URL:", apiUrl);
+
+        // Quill editor setup
+        const toolbarOptions = {
+            container: "#toolbar",
+            handlers: {
+                image: () => {
+                    const input = document.createElement("input");
+                    input.setAttribute("type", "file");
+                    input.setAttribute("accept", "image/*");
+                    input.click();
+                    input.onchange = () => {
+                        const file = input.files[0];
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                            const range = quill.getSelection();
+                            quill.insertEmbed(range.index, "image", reader.result);
+                        };
+                        reader.readAsDataURL(file);
+                    };
+                },
+            },
+        };
+
+        // Quill editörü başlatma
+        const quill = new Quill("#editor", {
+            theme: "snow",
+            modules: {
+                toolbar: toolbarOptions,
+            },
+        });
+
+        // API'den veri çekme
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                // API'den gelen verilerle inputları dolduruyoruz
+                document.getElementById("newsTitle").value = data.NewsTitle || '';
+                quill.root.innerHTML = data.NewsContetText || '';  // Quill editörü içeriği
+                document.getElementById("newsOwnerId").value = data.NewsOwnerId || '';
+                document.getElementById("newsCategoryId").value = data.NewsCategory.CategoryName || '';
+
+                document.getElementById("newsAdminId").value = data.NewsAdminId || '';
+                document.getElementById("newsRating").value = data.NewsRating || '';
+                document.getElementById("newsDate").value = data.NewsDate || '';
+                document.getElementById("newsYoutubeLink").value = data.NewsYoutubeLink || '';
+            })
+            .catch(error => console.error('API hatası:', error));
+
+        // Form gönderme işlemi
+        document.getElementById("newsForm").addEventListener("submit", async (event) => {
+            event.preventDefault(); // Formun gerçek gönderimini engelle
+
+            const formData = new FormData(event.target);
+
+            // Quill editör içeriğini al ve formData'ya ekle
+            const quillContent = quill.root.innerHTML;
+            formData.append("NewsContetText", quillContent); // Quill içeriğini formData'ya ekle
+
+            // Form verilerini konsola yazdır (geliştirme amacıyla)
+            formData.forEach((value, key) => {
+                if (value instanceof File) {
+                    console.log(`${key}: ${value.name}`);
+                } else {
+                    console.log(`${key}: ${value}`);
+                }
+            });
+
+            try {
+                // PUT isteği ile veri güncelleme
+                const response = await fetch(apiUrl, {
+                    method: 'PATCH',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    // Başarıyla güncellendiyse kullanıcıyı yönlendir
+                    window.location.href = '/Home/News';  // Veya uygun bir sayfaya yönlendir
+                } else {
+                    const errorText = await response.text();
+                    alert("Hata: " + errorText);
+                }
+            } catch (error) {
+                console.error("İstek başarısız oldu:", error);
+                alert("Bağlantı hatası: " + error.message);
+            }
+        });
+    });
+
+
+    
+
+
+
+
+</script>

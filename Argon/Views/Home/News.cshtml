@@ -16,10 +16,14 @@
         color: #dc3545;
         font-weight: bold;
     }
+    hr{
+        background-color:black;
+    }
 </style>
 
 
 <main class="main-content position-relative border-radius-lg">
+    
 
     <div class="container-fluid py-4 ">
         <div class="row d-flex justify-content-center">
@@ -37,9 +41,8 @@
                                 </div>
                             </div>
                             <div class="col-4 text-end">
-                                <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
-                                    <i class="fa-solid fa-newspaper"></i>
-
+                                <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle" style="display:grid;place-items:center;color:white;">
+                                    AZ
                                 </div>
                             </div>
                         </div>
@@ -58,9 +61,8 @@
                                 </div>
                             </div>
                             <div class="col-4 text-end">
-                                <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
-                                    <i class="fa-solid fa-newspaper"></i>
-
+                                <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle" style="display:grid;place-items:center;color:white;">
+                                    EN
                                 </div>
                             </div>
                         </div>
@@ -79,9 +81,8 @@
                                 </div>
                             </div>
                             <div class="col-4 text-end">
-                                <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
-                                    <i class="fa-solid fa-newspaper"></i>
-
+                                <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle" style="display:grid;place-items:center;color:white;">
+                                    RU
                                 </div>
                             </div>
                         </div>
@@ -91,14 +92,19 @@
         </div>
 
     </div>
-
+   <hr />
+    <div class="row d-flex justify-content-center mt-5">
+        <div class="d-flex justify-content-center align-items-center">
+            <a href="/Home/PostNews" class="btn btn-primary btn-lg">
+                Xəbər Əlavə et
+            </a>
+        </div>
 
 </main>
 <br />
 <br />
-<div class="container-fluid py-4 ">
-    <div class="row d-flex justify-content-center">
-        <a href="/Home/PostNews"> Xeber Elave et</a>
+<div class="container-fluid py-2 ">
+
 
         <div class="container mt-4">
             <h1 class="text-center mb-4">Haberler Yönetimi</h1>
@@ -108,21 +114,37 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
+                    <div class="container mt-4">
                         <table class="table table-hover align-middle">
                             <thead class="table-light">
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Başlıq</th>
-                                    <th scope="col">Sekil</th>
+                                    <th scope="col">Şəkil</th>
                                     <th scope="col">Tarix</th>
                                     <th scope="col">Admin</th>
-                                    <th scope="col">Muxbir</th>
+                                    <th scope="col">Müxbir</th>
                                     <th scope="col">Status</th>
-                                    <th scope="col">Emeliyyatlar</th>
+                                    <th scope="col">Əməliyyatlar</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
                         </table>
+                        <nav aria-label="Pagination">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item">
+                                    <button class="page-link" id="prevPage" disabled>Öncəki</button>
+                                </li>
+                                <li class="page-item">
+                                    <span class="page-link" id="currentPage">1</span>
+                                </li>
+                                <li class="page-item">
+                                    <button class="page-link" id="nextPage">Sonrakı</button>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+
                     </div>
                 </div>
             </div>
@@ -140,15 +162,23 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.5/perfect-scrollbar.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    const apiUrl = "https://localhost:44314/api/news/admin/0";
+
+<script>
+    const apiUrl = "https://localhost:44314/api/news/admin/";
     const tableBody = document.querySelector("tbody");
-    const pageNumber = 0;
+    const prevPageButton = document.getElementById("prevPage");
+    const nextPageButton = document.getElementById("nextPage");
+    const currentPageDisplay = document.getElementById("currentPage");
+
+    let currentPage = 0;
     const startDate = "2024-12-01";
     const endDate = "2024-12-31";
 
     function fetchNews(page) {
+        tableBody.innerHTML = ""; // Önceki verileri temizle
         const url = new URL(apiUrl + page);
         if (startDate) url.searchParams.append("startDate", startDate);
         if (endDate) url.searchParams.append("endDate", endDate);
@@ -161,73 +191,124 @@
                 return response.json();
             })
             .then((newsItems) => {
-                newsItems.forEach((newsItem, index) => {
-                    console.log(newsItem.newsPhotos[0]?.photoUrl);
+                if (newsItems.length === 0) {
+                    nextPageButton.disabled = true; // Son sayfa
+                    if (page > 0) currentPage--; // Geri al
+                    return;
+                }
 
+                newsItems.forEach((newsItem, index) => {
                     const row = document.createElement("tr");
                     row.innerHTML = `
-                                    <td>${index + 1 + page * 2}</td>
-                                    <td>${newsItem.newsTitle}</td>
-                                    <td>
-                                              ${newsItem.newsPhotos?.length > 0 ? `
-      <img src="${newsItem.newsPhotos[0]?.photoUrl}" alt="Haber Fotoğrafı" style="width: 50px; height: 50px; object-fit: cover;">
-    ` : "Fotoğraf Yok"}
-
-                                    </td>
-                                    <td>${new Date(newsItem.newsDate).toLocaleDateString()}</td>
-                                        <td>${newsItem.newsAdmin?.userName || "Bilinmiyor"}</td>
-                                    <td>${newsItem.newsOwner?.ownerName || "Bilinmiyor"}</td>
-                                    <td>
-                                      <span class="status ${newsItem.newsVisibility ? "active" : "inactive"}">
-                                            ${newsItem.newsVisibility ? "Aktif" : "Pasif"}
-                                      </span>
-                                    </td>
-                                    <td>
-                                      <a href="#" class="text-dark me-2">
-                                        <i class="fa-solid fa-eye"></i>
-                                      </a>
-                                      <a href="#" class="text-primary me-2">
-                                        <i class="fa-solid fa-pen"></i>
-                                      </a>
-                                      <a href="javascript:void(0);" class="text-danger deleteNews" data-id="${newsItem.newsId}">
-                                        <i class="fa-solid fa-trash"></i>
-                                      </a>
-                                    </td>
-                                  `;
+                        <td>${index + 1 + page * 10}</td>
+                        <td>${newsItem.newsTitle}</td>
+                        <td>
+                            ${newsItem.newsPhotos?.length > 0 ? `
+                            <img src="${newsItem.newsPhotos[0]?.photoUrl}" alt="Haber Fotoğrafı" style="width: 50px; height: 50px; object-fit: cover;">
+                            ` : "Şəkil yoxdur"}
+                        </td>
+                        <td>${new Date(newsItem.newsDate).toLocaleDateString()}</td>
+                        <td>${newsItem.newsAdmin?.userName || "Bilinmir"}</td>
+                        <td>${newsItem.newsOwner?.ownerName || "Bilinmir"}</td>
+                        <td>
+                            <span class="btn btn-lg status ${newsItem.newsVisibility ? "active" : "inactive"}">
+                                ${newsItem.newsVisibility ? "Aktiv" : "Passiv"}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="#" class="text-dark me-2 btn">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+                            <a href="/Home/PutNews/${newsItem.newsId}" class="text-primary me-2 btn">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            <a href="javascript:void(0);" class="text-danger deleteNews btn" data-id="${newsItem.newsId}">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </td>
+                    `;
                     tableBody.appendChild(row);
                 });
+
+                nextPageButton.disabled = newsItems.length < 10; // Eğer veri 10'dan azsa, son sayfa
             })
             .catch((error) => {
                 console.error("Hata:", error);
             });
     }
 
-    fetchNews(pageNumber);
+    // İlk sayfayı yükle
+    fetchNews(currentPage);
 
-    document.addEventListener("click", function (e) {
-        if (e.target.closest(".deleteNews")) {
-            const newsId = e.target.closest(".deleteNews").getAttribute("data-id");
-
-            if (confirm("Bu haberi silmek istediğinize emin misiniz?")) {
-                fetch(`/api/news/id/${newsId}`, {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                })
-                    .then((response) => {
-                        if (response.ok) {
-                            alert("Haber başarıyla silindi!");
-                            location.reload();
-                        } else {
-                            alert("Haber silinirken bir hata oluştu.");
-                        }
-                    })
-                    .catch((error) => {
-                        console.error("Hata:", error);
-                    }); // Eksik parantez ve blok kapama burada düzeltildi
-            }
+    // Önceki ve Sonraki düğmelere tıklama olayları
+    prevPageButton.addEventListener("click", () => {
+        if (currentPage > 0) {
+            currentPage--;
+            fetchNews(currentPage);
+            currentPageDisplay.textContent = currentPage + 1;
+            nextPageButton.disabled = false;
+        }
+        if (currentPage === 0) {
+            prevPageButton.disabled = true;
         }
     });
+
+    nextPageButton.addEventListener("click", () => {
+        currentPage++;
+        fetchNews(currentPage);
+        currentPageDisplay.textContent = currentPage + 1;
+        prevPageButton.disabled = false;
+    });
+
+                    tableBody.addEventListener("click", (e) => {
+        const statusButton = e.target.closest(".status");
+        if (statusButton) {
+            const row = statusButton.closest("tr");
+            const newsId = row.querySelector(".deleteNews").getAttribute("data-id");
+            const currentStatus = statusButton.textContent.trim() === "Aktiv";
+            const newStatus = !currentStatus;
+
+            // PUT isteği ile yeni durumu gönder
+            fetch(`https://localhost:44314/api/news/${newsId}/visibility`, {
+                method: "PUT",  // PUT metodu kullanıyoruz
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ IsVisible: newStatus }), // `IsVisible` alanını gönderiyoruz
+            })
+            .then((response) => {
+                if (response.ok) {
+                    statusButton.textContent = newStatus ? "Aktiv" : "Passiv";
+                    statusButton.classList.toggle("active", newStatus);
+                    statusButton.classList.toggle("inactive", !newStatus);
+
+                    // SweetAlert ile başarılı mesajı
+                    Swal.fire({
+                        title: 'Uğurlu!',
+                        text: 'Xəbər statusu uğurla yenilendi!',
+                        icon: 'success',
+                        confirmButtonText: 'Bağla'
+                    });
+                } else {
+                    throw new Error("Durum güncellenemedi.");
+                }
+            })
+            .catch((error) => {
+                console.error("Hata:", error);
+
+                // SweetAlert ile hata mesajı
+                Swal.fire({
+                    title: 'Xəta!',
+                    text: 'Status yenilənərkən bir xəta baş verdi.',
+                    icon: 'error',
+                    confirmButtonText: 'Bağla'
+                });
+            });
+        }
+    });
+
+
+
+    
 
 </script>

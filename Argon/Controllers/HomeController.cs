@@ -22,7 +22,7 @@ namespace Argon.Controllers
             _httpClient = new HttpClient();
         }
 
-        // Login iþlemi
+
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
@@ -41,13 +41,11 @@ namespace Argon.Controllers
                 var token = await response.Content.ReadAsStringAsync();
                 HttpContext.Session.SetString("jwtToken", token);
 
-                // Cookie'ye kullanýcý adýný kaydetme
                 Response.Cookies.Append("userName", username);
 
-                // ViewBag.UserName'i set et
                 ViewBag.UserName = username;
 
-                return RedirectToAction("Home"); // Ana sayfaya yönlendirme
+                return RedirectToAction("Home");
             }
             else
             {
@@ -57,12 +55,6 @@ namespace Argon.Controllers
             }
         }
 
-
-
-
-
-
-        // Korumalý veriyi almak için API'ye GET isteði gönder
         public async Task<IActionResult> ProtectedData()
         {
             var token = HttpContext.Session.GetString("jwtToken");
@@ -89,11 +81,8 @@ namespace Argon.Controllers
 
         public IActionResult SomeAction()
         {
-            // Cookie'den UserName'i al
             var userName = Request.Cookies["UserName"];
 
-            // Session'dan UserName'i al
-            // var userName = HttpContext.Session.GetString("UserName");
 
             ViewBag.UserName = userName;
 
@@ -108,10 +97,8 @@ namespace Argon.Controllers
             var handler = new JwtSecurityTokenHandler();
             try
             {
-                // JWT token'ý çözümle
                 var jwtToken = handler.ReadJwtToken(token);
 
-                // Kullanýcý adýný token'dan çek
                 var usernameClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
 
                 if (string.IsNullOrEmpty(usernameClaim))
@@ -133,7 +120,6 @@ namespace Argon.Controllers
 
         public IActionResult Logout()
         {
-            // Token'ý ve cookie'yi temizle
             HttpContext.Session.Remove("jwtToken");
             HttpContext.Response.Cookies.Delete("username");
 
@@ -389,6 +375,8 @@ namespace Argon.Controllers
         // Diðer aksiyonlar
         public IActionResult tables() => View();
         public IActionResult PostNews() => View();
+        public IActionResult PutNews() => View();
+
 
 
         public IActionResult login() => View();
