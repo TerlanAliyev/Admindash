@@ -1,5 +1,7 @@
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Argon.Models;
@@ -7,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Argon.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _configuration;
@@ -32,24 +34,33 @@ namespace Argon.Controllers
 
             var jsonContent = new StringContent(JsonSerializer.Serialize(loginRequest), System.Text.Encoding.UTF8, "application/json");
 
-            // API'ye login isteði gönder
             var response = await _httpClient.PostAsync("https://localhost:44314/api/user/login", jsonContent);
 
             if (response.IsSuccessStatusCode)
             {
-                // Token'ý al
                 var token = await response.Content.ReadAsStringAsync();
-
-                // Token'ý session'a kaydet
                 HttpContext.Session.SetString("jwtToken", token);
 
-                // API'den korumalý veriyi al
-                return RedirectToAction("ProtectedData");
-            }
+                // Cookie'ye kullanýcý adýný kaydetme
+                Response.Cookies.Append("userName", username);
 
-            ViewData["ErrorMessage"] = "Invalid credentials";
-            return View();
+                // ViewBag.UserName'i set et
+                ViewBag.UserName = username;
+
+                return RedirectToAction("Home"); // Ana sayfaya yönlendirme
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                ViewData["ErrorMessage"] = errorMessage;
+                return View();
+            }
         }
+
+
+
+
+
 
         // Korumalý veriyi almak için API'ye GET isteði gönder
         public async Task<IActionResult> ProtectedData()
@@ -75,6 +86,72 @@ namespace Argon.Controllers
 
             return Unauthorized();
         }
+
+        public IActionResult SomeAction()
+        {
+            // Cookie'den UserName'i al
+            var userName = Request.Cookies["UserName"];
+
+            // Session'dan UserName'i al
+            // var userName = HttpContext.Session.GetString("UserName");
+
+            ViewBag.UserName = userName;
+
+            return View();
+        }
+
+
+
+
+        private string GetUserNameFromToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            try
+            {
+                // JWT token'ý çözümle
+                var jwtToken = handler.ReadJwtToken(token);
+
+                // Kullanýcý adýný token'dan çek
+                var usernameClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+
+                if (string.IsNullOrEmpty(usernameClaim))
+                {
+                    throw new Exception("Token'da kullanýcý adý bulunamadý.");
+                }
+
+                return usernameClaim;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Token iþleme hatasý: {ex.Message}");
+                throw;
+            }
+        }
+
+
+
+
+        public IActionResult Logout()
+        {
+            // Token'ý ve cookie'yi temizle
+            HttpContext.Session.Remove("jwtToken");
+            HttpContext.Response.Cookies.Delete("username");
+
+            return RedirectToAction("Login");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -171,7 +248,7 @@ namespace Argon.Controllers
                 var newsCount = JsonSerializer.Deserialize<JsonElement>(data).GetProperty("newsCount").GetInt32();
                 return newsCount;
             }
-            return 0; 
+            return 0;
         }
 
         // Pdf sayý almaq ucun API'dan GET 
@@ -180,8 +257,8 @@ namespace Argon.Controllers
             var response = await _httpClient.GetAsync("https://localhost:44314/api/newspaper/count");
             if (response.IsSuccessStatusCode)
             {
-                var data= await response.Content.ReadAsStringAsync();
-                var pdfCount=JsonSerializer.Deserialize<JsonElement>(data).GetProperty("newsPaperCount").GetInt32();
+                var data = await response.Content.ReadAsStringAsync();
+                var pdfCount = JsonSerializer.Deserialize<JsonElement>(data).GetProperty("newsPaperCount").GetInt32();
                 return pdfCount;
             }
             return 0;
@@ -193,8 +270,8 @@ namespace Argon.Controllers
             var response = await _httpClient.GetAsync("https://localhost:44314/api/%C4%B0nfographics/count");
             if (response.IsSuccessStatusCode)
             {
-                var data= await response.Content.ReadAsStringAsync();
-                var infcount =JsonSerializer.Deserialize<JsonElement>(data).GetProperty("infs").GetInt32(); 
+                var data = await response.Content.ReadAsStringAsync();
+                var infcount = JsonSerializer.Deserialize<JsonElement>(data).GetProperty("infs").GetInt32();
                 return infcount;
             }
             return 0;
@@ -249,7 +326,9 @@ namespace Argon.Controllers
             var categoryCount = await GetCategoryCount();
             var newsCount = await GetNewsCount();
             var pdfCount = await GetPdfCount();
-            var infcount =await GetInfogCount();
+            var infcount = await GetInfogCount();
+            ViewBag.UserName = GetUserNameFromCookie();
+
 
             ViewData["CategoryCount"] = categoryCount;
             ViewData["NewsCount"] = newsCount;
