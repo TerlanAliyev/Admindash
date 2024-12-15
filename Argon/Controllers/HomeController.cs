@@ -130,6 +130,19 @@ namespace Argon.Controllers
 
 
 
+        //NewsPapercount
+        private async Task<int> GetNewsPaperCount()
+        {
+            var response = await _httpClient.GetAsync("https://localhost:44314/api/newspaper/count");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadAsStringAsync();
+                var newspapercount = JsonSerializer.Deserialize<JsonElement>(data).GetProperty("newsPaperCount").GetInt32();
+                return newspapercount;
+            }
+            return 0; // Eðer hata oluþursa 0 döndür
+        }
 
 
 
@@ -169,6 +182,7 @@ namespace Argon.Controllers
             }
             return 0; // Eðer hata oluþursa 0 döndür
         }
+
         private async Task<int> GetCategoryCountByLang2()
         {
             var response = await _httpClient.GetAsync("https://localhost:44314/api/category/count/2");
@@ -364,7 +378,13 @@ namespace Argon.Controllers
             return View();
         }
 
+        public async Task<IActionResult> NewsPaper()
+        {
+            var newspapercount= await GetNewsPaperCount();
+            ViewData["NewsPapercount"] = newspapercount;
 
+            return View();
+        }
 
 
 
@@ -376,6 +396,9 @@ namespace Argon.Controllers
         public IActionResult tables() => View();
         public IActionResult PostNews() => View();
         public IActionResult PutNews() => View();
+
+        public IActionResult PostNewsPaper() => View();
+
 
 
 

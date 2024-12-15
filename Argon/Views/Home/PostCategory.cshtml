@@ -1,23 +1,28 @@
-﻿<div class="container mt-5">
+﻿@{
+    ViewData["ShowNavbar"] = false;  // Navbar'ı engelle
+}
+
+
+<div class="container mt-5">
     <div class="card shadow border-0">
         <div class="card-header bg-gradient-primary text-white">
-            <h3 class="mb-0">Kategori Ekle</h3>
+            <h3 class="mb-0">Kateqoriya əlavə et</h3>
         </div>
         <div class="card-body">
             <form id="categoryForm" method="post" action="" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="CategoryName" class="form-label">Kategori Adı</label>
-                    <input type="text" class="form-control" id="CategoryName" name="CategoryName" required placeholder="Kategori adını girin">
+                    <input type="text" class="form-control" id="CategoryName" name="CategoryName" required placeholder="Kateqoriya adı" required>
                 </div>
 
                 <div class="mb-3">
-                    <label for="CategoryCoverUrl" class="form-label">Kategori Kapak Görseli</label>
-                    <input type="file" class="form-control" id="CategoryCoverUrl" name="CategoryCoverUrl">
+                    <label for="CategoryCoverUrl" class="form-label">Kateqoriya şəkli</label>
+                    <input type="file" class="form-control" id="CategoryCoverUrl" name="CategoryCoverUrl" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="CategoryLangId" class="form-label">Dil</label>
-                    <select class="form-select" id="CategoryLangId" name="CategoryLangId">
+                    <select class="form-select" id="CategoryLangId" name="CategoryLangId" required>
                         <option value="">Dil Seçin</option>
                         <option value="1">AZ</option>
                         <option value="2">ENG</option>
@@ -25,13 +30,15 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100">Ekle</button>
+                <button type="submit" class="btn btn-primary w-100">Əlavə et</button>
             </form>
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-           document.getElementById("categoryForm").addEventListener("submit", async (event) => {
+              document.getElementById("categoryForm").addEventListener("submit", async (event) => {
         event.preventDefault();
 
         const formData = new FormData(event.target);
@@ -44,14 +51,26 @@
 
             if (response.ok) {
                 const result = await response.json();
-                alert("Başarılı: " + JSON.stringify(result));
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Uğurlu əməliyyat',
+                    text: "Kateqoriya uğurla əlavə edildi",
+                });
             } else {
                 const errorText = await response.text();
-                alert("Hata: " + errorText);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Xəta',
+                    text: errorText,
+                });
             }
         } catch (error) {
             console.error("İstek başarısız oldu:", error);
-            alert("Bağlantı hatası: " + error.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Xəta',
+                text: 'Kateqoriya əlavə edilə bilmədi',
+            });
         }
     });
 

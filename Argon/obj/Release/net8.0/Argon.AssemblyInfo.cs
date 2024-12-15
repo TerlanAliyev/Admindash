@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Argon")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3c74dea2f88713b0e4cc9797c7d4b74213a5a6c2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+650be576cb3e17d626db408e68974437bb5d01e2")]
 [assembly: System.Reflection.AssemblyProductAttribute("Argon")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Argon")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

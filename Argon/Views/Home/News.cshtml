@@ -19,6 +19,15 @@
     hr{
         background-color:black;
     }
+
+    pagination {
+        ul{
+            li{
+        padding: 10px;
+        
+    }
+        }
+    }
 </style>
 
 
@@ -104,8 +113,6 @@
 <br />
 <br />
 <div class="container-fluid py-2 ">
-
-
         <div class="container mt-4">
             <h1 class="text-center mb-4">Haberler Yönetimi</h1>
             <div class="card shadow">
@@ -133,13 +140,17 @@
                         <nav aria-label="Pagination">
                             <ul class="pagination justify-content-center">
                                 <li class="page-item">
-                                    <button class="page-link" id="prevPage" disabled>Öncəki</button>
+                                    <button class="page-link" id="prevPage" disabled>
+                                        <i class="fa-solid fa-arrow-left"></i>
+                                    </button>
                                 </li>
                                 <li class="page-item">
                                     <span class="page-link" id="currentPage">1</span>
                                 </li>
                                 <li class="page-item">
-                                    <button class="page-link" id="nextPage">Sonrakı</button>
+                                    <button class="page-link" id="nextPage">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </button>
                                 </li>
                             </ul>
                         </nav>
@@ -151,11 +162,6 @@
         </div>
     </div>
 
-</div>
-
-
-
-
 
 
 <!-- Bootstrap JS -->
@@ -164,6 +170,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <!-- SweetAlert2 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- SweetAlert2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 
 
 <script>
@@ -210,11 +218,12 @@
                         <td>${new Date(newsItem.newsDate).toLocaleDateString()}</td>
                         <td>${newsItem.newsAdmin?.userName || "Bilinmir"}</td>
                         <td>${newsItem.newsOwner?.ownerName || "Bilinmir"}</td>
-                        <td>
-                            <span class="btn btn-lg status ${newsItem.newsVisibility ? "active" : "inactive"}">
-                                ${newsItem.newsVisibility ? "Aktiv" : "Passiv"}
-                            </span>
-                        </td>
+                                <td>
+        <span class="btn btn-lg status ${newsItem.newsVisibility ? "active" : "inactive"}">
+            ${newsItem.newsVisibility ? "Aktiv" : "Passiv"}
+        </span>
+    </td>
+
                         <td>
                             <a href="#" class="text-dark me-2 btn">
                                 <i class="fa-solid fa-eye"></i>
@@ -222,7 +231,7 @@
                             <a href="/Home/PutNews/${newsItem.newsId}" class="text-primary me-2 btn">
                                 <i class="fa-solid fa-pen"></i>
                             </a>
-                            <a href="javascript:void(0);" class="text-danger deleteNews btn" data-id="${newsItem.newsId}">
+                            <a class="text-danger deleteNews btn" data-id="${newsItem.newsId}">
                                 <i class="fa-solid fa-trash"></i>
                             </a>
                         </td>
@@ -304,6 +313,70 @@
                     confirmButtonText: 'Bağla'
                 });
             });
+        }
+    });
+
+        // DELETE isteği atan fonksiyon
+               function deleteNews(id) {
+        Swal.fire({
+            title: "Emin misiniz?",
+            text: "Bu haberi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Evet, sil!",
+            cancelButtonText: "Hayır, iptal et!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`https://localhost:44314/api/news/id/${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        Swal.fire(
+                            "Silindi!",
+                            "Haber başarıyla silindi.",
+                            "success"
+                        ).then(() => {
+                            // Sayfayı yenile
+                            location.reload();
+                        });
+                    } else if (response.status === 404) {
+                        Swal.fire(
+                            "Bulunamadı!",
+                            "Haber bulunamadı.",
+                            "error"
+                        );
+                    } else {
+                        Swal.fire(
+                            "Hata!",
+                            `Haber silinemedi. Hata kodu: ${response.status}`,
+                            "error"
+                        );
+                    }
+                })
+                .catch(error => {
+                    console.error("Bir hata oluştu:", error);
+                    Swal.fire(
+                        "Sunucu Hatası!",
+                        "Sunucuya ulaşılamadı. Lütfen tekrar deneyin.",
+                        "error"
+                    );
+                });
+            }
+        });
+    }
+
+
+    // Örnek: Bir buton tıklanma olayına bağlama
+    document.addEventListener("click", function (e) {
+        if (e.target.classList.contains("deleteNews")) {
+            const newsId = e.target.getAttribute("data-id");
+            deleteNews(newsId);
         }
     });
 
