@@ -212,7 +212,8 @@
                         <td>${newsItem.newsTitle}</td>
                         <td>
                             ${newsItem.newsPhotos?.length > 0 ? `
-                            <img src="${newsItem.newsPhotos[0]?.photoUrl}" alt="Haber Fotoğrafı" style="width: 50px; height: 50px; object-fit: cover;">
+                            <img src="${newsItem.newsPhotos[0]?.photoUrl ? 'https://localhost:44314/' + newsItem.newsPhotos[0].photoUrl : ''}" alt="Haber Fotoğrafı" style="width: 50px; height: 50px; object-fit: cover;">
+
                             ` : "Şəkil yoxdur"}
                         </td>
                         <td>${new Date(newsItem.newsDate).toLocaleDateString()}</td>

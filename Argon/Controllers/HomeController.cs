@@ -145,16 +145,6 @@ namespace Argon.Controllers
         }
 
 
-
-
-
-
-
-
-
-
-
-
         // Kategori sayýsýný almak için API'den GET isteði
         private async Task<int> GetCategoryCount()
         {
@@ -267,11 +257,11 @@ namespace Argon.Controllers
 
         private async Task<int> GetInfogCount()
         {
-            var response = await _httpClient.GetAsync("https://localhost:44314/api/%C4%B0nfographics/count");
+            var response = await _httpClient.GetAsync("https://localhost:44314/api/Infographics/count");
             if (response.IsSuccessStatusCode)
             {
                 var data = await response.Content.ReadAsStringAsync();
-                var infcount = JsonSerializer.Deserialize<JsonElement>(data).GetProperty("infs").GetInt32();
+                var infcount = JsonSerializer.Deserialize<JsonElement>(data).GetProperty("infCount").GetInt32();
                 return infcount;
             }
             return 0;
@@ -386,6 +376,13 @@ namespace Argon.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Infographics()
+        {
+            var newspapercount = await GetNewsPaperCount();
+            ViewData["NewsPapercount"] = newspapercount;
+
+            return View();
+        }
 
 
 
@@ -396,10 +393,19 @@ namespace Argon.Controllers
         public IActionResult tables() => View();
         public IActionResult PostNews() => View();
         public IActionResult PutNews() => View();
+        public IActionResult PutInf() => View();
+        public IActionResult PutYT() => View();
+
+
+        public IActionResult PostInf() => View();
+        public IActionResult YtVideos() => View();
+        public IActionResult PostVideos() => View();
+
+
+
 
         public IActionResult PostNewsPaper() => View();
-
-
+        public IActionResult PutNewsPaper() => View();
 
 
         public IActionResult login() => View();

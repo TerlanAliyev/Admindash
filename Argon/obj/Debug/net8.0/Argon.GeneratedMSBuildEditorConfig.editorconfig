@@ -36,6 +36,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Terlan Aliyev/Desktop/13.13/Admindash/Argon/Views/Home/Infographics.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmZvZ3JhcGhpY3MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Terlan Aliyev/Desktop/13.13/Admindash/Argon/Views/Home/login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxsb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -52,12 +56,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQb3N0Q2F0ZWdvcnkuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Terlan Aliyev/Desktop/13.13/Admindash/Argon/Views/Home/PostInf.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQb3N0SW5mLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Terlan Aliyev/Desktop/13.13/Admindash/Argon/Views/Home/PostNews.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQb3N0TmV3cy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Terlan Aliyev/Desktop/13.13/Admindash/Argon/Views/Home/PostNewsPaper.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQb3N0TmV3c1BhcGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Terlan Aliyev/Desktop/13.13/Admindash/Argon/Views/Home/PostVideos.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQb3N0VmlkZW9zLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Terlan Aliyev/Desktop/13.13/Admindash/Argon/Views/Home/Privacy.cshtml]
@@ -68,8 +80,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxwcm9maWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Terlan Aliyev/Desktop/13.13/Admindash/Argon/Views/Home/PutInf.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQdXRJbmYuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Terlan Aliyev/Desktop/13.13/Admindash/Argon/Views/Home/PutNews.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQdXROZXdzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Terlan Aliyev/Desktop/13.13/Admindash/Argon/Views/Home/PutNewsPaper.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQdXROZXdzUGFwZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Terlan Aliyev/Desktop/13.13/Admindash/Argon/Views/Home/PutYT.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQdXRZVC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Terlan Aliyev/Desktop/13.13/Admindash/Argon/Views/Home/signUp.cshtml]
@@ -78,6 +102,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Terlan Aliyev/Desktop/13.13/Admindash/Argon/Views/Home/tables.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVx0YWJsZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Terlan Aliyev/Desktop/13.13/Admindash/Argon/Views/Home/YtVideos.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxZdFZpZGVvcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Terlan Aliyev/Desktop/13.13/Admindash/Argon/Views/Shared/Error.cshtml]

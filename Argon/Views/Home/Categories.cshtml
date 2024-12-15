@@ -4,6 +4,10 @@
 		background-color: #f8f9fe;
 	}
 
+	table {
+		max-height: 100px!important;
+		overflow: scroll;
+	}
 	.table-container {
 		padding: 20px;
 	}
@@ -34,15 +38,54 @@
 
 	}
 	}
+
 </style>
+<hr />
+<div class="row d-flex justify-content-center mt-5">
+	<div class="d-flex justify-content-center align-items-center">
+		<a href="/Home/PostCategory" class="btn btn-primary btn-lg">
+			Kateqoriya Əlavə et
+		</a>
+	</div>
+	<hr />
+<section class="other" style="margin-top:10px;">
+	<div class="container-fluid py-4">
+		<div class="row">
+			@foreach (var category in (List<Argon.Models.CategoryNews>)ViewData["CategoryNewsList"])
+			{
+				<div class="col-xl-3 col-sm-6 mb-xl-0 mb-4 mt-3">
+					<div class="card">
+						<div class="card-body p-3">
+							<div class="row">
+								<div class="col-8">
+									<div class="numbers">
+										<span class="text-success text-sm font-weight-bolder">@category.CategoryName</span>
+										<h5 class="font-weight-bolder">
+											@category.NewsCount
+										</h5>
+									</div>
+								</div>
+								<div class="col-4 text-end">
+									<div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
+										<i class="fa-solid fa-list"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</section>
+	<hr />
 
-
-<main class="main-content position-relative border-radius-lg">
+<main class="main-content position-relative border-radius-lg">	
 
 	<div class="container-fluid py-4 ">
 		<div class="row d-flex justify-content-center">
 			<div class="col-xl-12 col-sm-6 mb-xl-0 mb-4 d-flex align-content-center justify-content-around">
-				<div class="card col-3 ">
+				<div class="card col-3 " id="azelang">
 					<div class="card-body p-3 ">
 						<div class="row">
 							<div class="col-8">
@@ -62,7 +105,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="card col-3">
+				<div class="card col-3" id="enlang">
 					<div class="card-body p-3">
 						<div class="row">
 							<div class="col-8">
@@ -82,7 +125,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="card col-3">
+				<div class="card col-3" id="rulng">
 					<div class="card-body p-3">
 						<div class="row">
 							<div class="col-8">
@@ -106,53 +149,12 @@
 		</div>
 
 	</div>
-	<hr />
-	<div class="row d-flex justify-content-center mt-5">
-		<div class="d-flex justify-content-center align-items-center">
-			<a href="/Home/PostCategory" class="btn btn-primary btn-lg">
-				Kateqoriya Əlavə et
-			</a>
-		</div>
-
+	
 </main>
-<section class="other" style="margin-top:100px;">
-	<div class="container-fluid py-4">
-		<div class="row">
-			@foreach (var category in (List<Argon.Models.CategoryNews>)ViewData["CategoryNewsList"])
-			{
-				<div class="col-xl-3 col-sm-6 mb-xl-0 mb-4 mt-3">
-					<div class="card">
-						<div class="card-body p-3">
-							<div class="row">
-								<div class="col-8">
-									<div class="numbers">
-										<span class="text-success text-sm font-weight-bolder">@category.CategoryName</span>
-										<p class="mb-0">
-											kateqoriyasina aid xeber sayi
-										</p>
-										<h5 class="font-weight-bolder">
-											@category.NewsCount
-										</h5>
-									</div>
-								</div>
-								<div class="col-4 text-end">
-									<div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
-										<i class="fa-solid fa-list"></i>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			}
-		</div>
-	</div>
-</section>
+
 <br />
 <hr />
 <div class="container-fluid py-2 ">
-
-
 	<div class="container mt-4">
 		<h1 class="text-center mb-4">Kateqoriya Yönetimi</h1>
 		<div class="card shadow">
@@ -172,7 +174,7 @@
 									<th scope="col">Əməliyyatlar</th>
 								</tr>
 							</thead>
-							<tbody></tbody>
+							<tbody id="categoryTableBody"></tbody>
 						</table>
 					</div>
 
@@ -185,12 +187,28 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-	const apiUrl = "https://localhost:44314/api/category/all"; // API URL'i
-	const tableBody = document.querySelector("tbody");
+	const apiUrl = "https://localhost:44314/api/category/all/"; // API URL'i
+	const tableBody = document.querySelector("#categoryTableBody"); // Tabloyu dolduracağımız alan
+			const apiUrlAzerbaijan = "https://localhost:44314/api/category/language/1"; // Azerbaycan dilindeki kategoriler
+	const apiUrlEnglish = "https://localhost:44314/api/category/language/2"; // İngilizce dilindeki kategoriler
+	const apiUrlRussian = "https://localhost:44314/api/category/language/3"; // Rusça dilindeki kategoriler
 
-	// Kategorileri API'den çekip tabloya ekler
-	function fetchCategories() {
+
+		// Kategorileri API'den çekip tabloya ekler
+	function fetchCategories(language) {
 		tableBody.innerHTML = ""; // Önceki verileri temizle
+		let apiUrl;
+
+		// Dil seçeneğine göre API URL'ini belirle
+		if (language === "1") {
+			apiUrl = apiUrlAzerbaijan;
+		} else if (language === "2") {
+			apiUrl = apiUrlEnglish;
+		} else if (language === "3") {
+			apiUrl = apiUrlRussian;
+		}
+
+		// Fetch işlemi
 		fetch(apiUrl)
 			.then((response) => {
 				if (!response.ok) {
@@ -215,9 +233,6 @@
 							</span>
 						</td>
 						 <td>
-								<a href="/Home/PutNews/${category.categoryId}" class="text-primary me-2 btn">
-									<i class="fa-solid fa-pen"></i>
-								</a>
 								<a class="text-danger deleteNews btn" data-id="${category.categoryId}">
 									<i class="fa-solid fa-trash"></i>
 								</a>
@@ -239,8 +254,18 @@
 			});
 	}
 
-	// Sayfa yüklendiğinde kategorileri çek
-	fetchCategories();
+	// Dil butonlarına event listener ekleyelim
+	document.getElementById("azelang").addEventListener("click", () => {
+		fetchCategories("1"); // Azerbaycan dilini temsil eder
+	});
+
+	document.getElementById("enlang").addEventListener("click", () => {
+		fetchCategories("2"); // İngilizce dilini temsil eder
+	});
+
+	document.getElementById("rulng").addEventListener("click", () => {
+		fetchCategories("3"); // Rusça dilini temsil eder
+	});
 
 	tableBody.addEventListener("click", (e) => {
 		const statusButton = e.target.closest(".status");
@@ -288,32 +313,60 @@
 			});
 		}
 	});
-			// DELETE isteği atan fonksiyon
+		// DELETE isteği atan fonksiyon
 	function deleteNews(id) {
-		if (confirm("Bu haberi silmek istediğinizden emin misiniz?")) {
-			fetch(`https://localhost:44314/api/category/${id}`, {
-				method: "DELETE", // HTTP DELETE metodu
-				headers: {
-					"Content-Type": "application/json" // Gerekli ise content-type ekleyebilirsiniz
-				}
-			})
-			.then(response => {
-				if (response.ok) {
-					alert("Haber başarıyla silindi.");
-					// Sayfada UI güncellemesi (örneğin, tablodan satırı kaldırabilirsiniz)
-					document.querySelector(`#news-${id}`)?.remove();
-				} else if (response.status === 404) {
-					alert("Haber bulunamadı.");
-				} else {
-					alert("Haber silinemedi. Hata kodu: " + response.status);
-				}
-			})
-			.catch(error => {
-				console.error("Bir hata oluştu:", error);
-				alert("Sunucuya ulaşılamadı. Lütfen tekrar deneyin.");
-			});
-		}
+		Swal.fire({
+			title: 'Emin misiniz?',
+			text: "Bu haberi silmek istediğinizden emin misiniz?",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Evet, sil!',
+			cancelButtonText: 'Hayır, iptal et!'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				fetch(`https://localhost:44314/api/category/${id}`, {
+					method: "DELETE", // HTTP DELETE metodu
+					headers: {
+						"Content-Type": "application/json" // Gerekli ise content-type ekleyebilirsiniz
+					}
+				})
+				.then(response => {
+					if (response.ok) {
+						Swal.fire(
+							'Haber Silindi!',
+							'Haber başarıyla silindi.',
+							'success'
+						);
+						// Sayfada UI güncellemesi (örneğin, tablodan satırı kaldırabilirsiniz)
+						document.querySelector(`#news-${id}`)?.remove();
+					} else if (response.status === 404) {
+						Swal.fire(
+							'Hata!',
+							'Haber bulunamadı.',
+							'error'
+						);
+					} else {
+						Swal.fire(
+							'Hata!',
+							'Haber silinemedi. Hata kodu: ' + response.status,
+							'error'
+						);
+					}
+				})
+				.catch(error => {
+					console.error("Bir hata oluştu:", error);
+					Swal.fire(
+						'Sunucu Hatası!',
+						'Sunucuya ulaşılamadı. Lütfen tekrar deneyin.',
+						'error'
+					);
+				});
+			}
+		});
 	}
+
 
 	// Örnek: Bir buton tıklanma olayına bağlama
 	document.addEventListener("click", function (e) {
@@ -324,3 +377,5 @@
 	});
 
 </script>
+
+
