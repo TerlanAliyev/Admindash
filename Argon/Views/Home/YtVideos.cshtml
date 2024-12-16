@@ -112,7 +112,8 @@
 
     <script>
 
-                    function convertToEmbedUrl(url) {
+
+                function convertToEmbedUrl(url) {
             if (!url) {
                 console.error("URL değeri undefined veya null");
                 return null;
@@ -125,20 +126,34 @@
 
             // YouTube video URL'lerini işler
             if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                const regex = /(?:youtu\.be\/|youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/?)([a-zA-Z0-9_-]{11}))/;
-                const match = url.match(regex);
-                if (match && match[1]) {
-                    videoId = match[1];
+                // youtu.be linki: https://youtu.be/videoId
+                if (url.includes('youtu.be')) {
+                    const match = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+                    if (match && match[1]) {
+                        videoId = match[1];
+                    }
+                }
+                // youtube.com linki: https://youtube.com/watch?v=videoId
+                else if (url.includes('youtube.com')) {
+                    const match = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+                    if (match && match[1]) {
+                        videoId = match[1];
+                    }
                 }
             }
 
             if (!videoId) {
                 console.error("Geçersiz video URL'si:", url);
-                return null;
+                return null;  // Video ID bulunamadıysa null döndür
             }
 
+            // Embed URL'sini oluştur
             return `https://www.youtube.com/embed/${videoId}`;
         }
+
+        // Örnek kullanım:
+        const videoUrl = "https://youtu.be/M3d-bFxnRcQ?si=ERecJY5SKf7pNmf9";
+        const embedUrl = convertToEmbedUrl(videoUrl);
 
 
 
@@ -176,7 +191,6 @@
                     }
 
                    newsItems.forEach((newsItem, index) => {
-            console.log("Video URL'si:", newsItem.videoUrl);  // Debug için yazdırma
 
             const row = document.createElement("tr");
             row.innerHTML = `
@@ -240,9 +254,8 @@
             }
         });
 
-
-            // DELETE isteği atan fonksiyon
-               function deleteNews(id) {
+        // DELETE isteği atan fonksiyon
+        function deleteNews(id) {
             Swal.fire({
                 title: "Emin misiniz?",
                 text: "Bu haberi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz!",
@@ -267,8 +280,8 @@
                                 "Haber başarıyla silindi.",
                                 "success"
                             ).then(() => {
-                                const rowToRemove = document.querySelector(`tr[data-id='${id}']`);
-                                if (rowToRemove) rowToRemove.remove();
+                                // Sayfa yenilenmesi
+                                location.reload(); // Sayfa yenilenir
                             });
                         } else if (response.status === 404) {
                             Swal.fire("Bulunamadı!", "Haber bulunamadı.", "error");
@@ -284,7 +297,6 @@
             });
         }
 
-
         // Örnek: Bir buton tıklanma olayına bağlama
         document.addEventListener("click", function (e) {
             if (e.target.classList.contains("deleteNews")) {
@@ -292,6 +304,7 @@
                 deleteNews(newsId);
             }
         });
+
 
 
 
