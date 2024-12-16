@@ -1,5 +1,4 @@
-﻿
-<div class="container mt-5">
+﻿<div class="container mt-5">
     <div class="card shadow border-0">
         <div class="card-header bg-gradient-primary text-white">
             <h3 class="mb-0">Inf əlavə et</h3>
@@ -8,17 +7,19 @@
             <form id="categoryForm" method="post" action="" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="CategoryName" class="form-label">Inf Adı</label>
-                    <input type="text" class="form-control" id="InfName" name="infName" required placeholder="Inf adı" required>
+                    <input type="text" class="form-control" id="InfName" name="infName" required placeholder="Inf adı">
                 </div>
 
-               	<div class="mb-3">
-                    <label for="NewspaperDate" class="form-label"> Nəşr Tarixi</label>
+                <div class="mb-3">
+                    <label for="NewspaperDate" class="form-label">Nəşr Tarixi</label>
                     <input type="date" class="form-control" id="infPostDate" name="infPostDate" required>
                 </div>
 
                 <div class="mb-3" id="add">
                     <label for="CategoryCoverUrl" class="form-label">Inf şəkli</label>
                     <input type="file" class="form-control" id="infPhoto" name="infPhoto" required>
+                    <div id="coverPreview" style="margin-top: 10px;"></div> <!-- Resim önizleme alanı -->
+
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">Əlavə et</button>
@@ -26,98 +27,137 @@
         </div>
     </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // 'id'yi URL'den almak
-        const path = window.location.pathname; // /Home/PutNewsPaper/123
-        const id = path.split('/').pop(); // '123' kısmını almak için son elemanı ayırıyoruz
-        console.log("ID: ", id); // id'nin doğru alındığını kontrol edin
+        // URL'den id'yi almak için kodu güncelle
+        const path = window.location.pathname;
+        const id = path.split('/').pop(); // URL'deki son kısmı almak (id)
+        console.log("ID:", id); // Konsolda id'yi kontrol edin
 
         // API'den veri almak için
         fetch(`https://localhost:44314/api/Infographics/id/${id}`)
             .then(response => response.json())
             .then(data => {
-                console.log("Veri alındı: ", data); // API'den gelen veriyi kontrol et
-                // API'den gelen verileri form elemanlarına yerleştirme
+                console.log("Veri alındı:", data);
                 if (data) {
                     document.getElementById("InfName").value = data.infName;
                     document.getElementById("infPostDate").value = data.infPostDate.split('T')[0]; // Tarih formatı: YYYY-MM-DD
-                    console.log(document.getElementById("infPostDate").value)
-                    // Üzqapağı (Cover Image) için div oluşturma
-                    const newDiv = document.createElement("div");
-                    newDiv.id = "coverPreview"; // id'yi ayarla
-                    newDiv.style.marginTop = "10px"; // Stil ekle
 
-                    // Yeni div öğesinin içine bir img öğesi ekle
-                    const img = document.createElement("img");
-                    img.src = `https://localhost:44314/${data.infPhoto}`; // data.newspaperCoverUrl ile img src'yi ayarlıyoruz
-                    img.style.maxWidth = "200px"; // Resmin boyutunu ayarla
-                    img.style.maxHeight = "200px";
-                    img.style.objectFit = "cover"; // Resmin boyutlarını orantılı hale getir
+                if (data.infPhoto) {
+                const newDiv = document.createElement("div");
+                newDiv.id = "coverPreview";
+                newDiv.style.marginTop = "10px";
 
-                    // img öğesini div içine ekle
-                    newDiv.appendChild(img);
+                const img = document.createElement("img");
+                img.src = `https://localhost:44314/${data.infPhoto}`;
+                img.style.maxWidth = "200px";
+                img.style.maxHeight = "200px";
+                img.style.objectFit = "cover";
 
-                    // Yeni div öğesini sayfadaki belirli bir elemana ekle
-                    document.getElementById("add").appendChild(newDiv);
+                newDiv.appendChild(img);
+                document.getElementById("add").appendChild(newDiv);
+            }
 
+                    
                 }
             })
             .catch(error => {
                 console.error("API çağrısı başarısız:", error);
-                // Hata durumunda SweetAlert ile kullanıcıyı bilgilendir
                 Swal.fire({
                     icon: 'error',
                     title: 'Bir hata oluştu',
                     text: error.message || 'API çağrısı sırasında bir sorun oluştu.'
                 });
             });
+    });
 
-        // Formu gönderme işlemi
-        document.getElementById("updateForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Sayfa yenilenmesinin engellenmesi
+        document.getElementById("infPhoto").addEventListener("change", (event) => {
+        console.log("Cover file selected:", event.target.files[0]);
+        const file = event.target.files[0];
+        const previewDiv = document.getElementById("coverPreview");
 
-            const updatedNews = {
-                newspaperTitle: document.getElementById("NewspaperTitle").value,
-                newspaperLinkFlip: document.getElementById("NewspaperLinkFlip").value,
-                newspaperDate: document.getElementById("NewspaperDate").value,
-                newspaperPrice: document.getElementById("NewspaperPrice").value,
-                newspaperStatus: document.getElementById("NewspaperStatus").checked, // Checkbox ise true/false
-                newspaperCoverUrl: document.getElementById("NewspaperCoverUrl").value, // Resim URL'si
-                newspaperPdfUrl: document.getElementById("NewspaperPdfFile").value // PDF URL'si
-            };
+        if (file && previewDiv) {
+            console.log("Updating preview...");
+            previewDiv.innerHTML = "";
 
-            console.log("Gönderilen Veri: ", updatedNews); // Gönderilen veriyi kontrol et
+            const img = document.createElement("img");
+            img.src = URL.createObjectURL(file); // Seçilen dosyanın geçici URL'sini oluştur
+            img.style.maxWidth = "200px";
+            img.style.maxHeight = "200px";
+            img.style.objectFit = "cover"; // Görüntü orantılı bir şekilde yerleştirilsin
 
-            // PUT isteği göndermek için
-            fetch(`https://localhost:44314/api/newspaper/edit/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updatedNews)
-            })
-            .then(response => response.json())
-            .then(result => {
-                console.log("API Yanıtı:", result); // Yanıtın tamamını logla
+            previewDiv.appendChild(img); // Resmi previewDiv içine ekle
+        }
+    });
+
+    // Formu gönderme işlemi
+        document.getElementById("categoryForm").addEventListener("submit", async function(event) {
+        event.preventDefault(); // Sayfa yenilenmesini engelle
+
+        const formData = new FormData(event.target);
+        const id = window.location.pathname.split('/').pop(); // id'yi burada tekrar alıyoruz
+
+        // Fotoğraf seçildi mi kontrol et
+        const newPhoto = document.getElementById("infPhoto").files[0];
+
+
+        if (newPhoto) {
+            formData.append("infPhoto", newPhoto); // Yeni fotoğrafı formData'ya ekleyin
+        } 
+        try {
+            const response = await fetch(`https://localhost:44314/api/Infographics/edit/${id}`, {
+                method: "PUT",
+                body: formData
+            });
+
+            if (response.ok) {
+                const result = await response.json();
                 Swal.fire({
                     icon: 'success',
-                    title: 'Başarılı!',
-                    text: result.Message || 'Haber başarıyla güncellendi.'
+                    title: 'Başarıyla Güncellendi!',
+                    text: 'Infografi başarıyla güncellendi.',
+                }).then(() => {
+                    window.location.href = "/home/Infographics"; // Başarı sonrası yönlendirme
                 });
-            })
-            .catch(error => {
-                // SweetAlert2 ile hata mesajı göster
+            } else {
+                const errorText = await response.text();
                 Swal.fire({
                     icon: 'error',
-                    title: 'Bir hata oluştu',
-                    text: error.message || 'API çağrısı başarısız oldu.'
+                    title: 'Hata!',
+                    text: errorText,
                 });
-                // Hata mesajını konsola yazdır
-                console.error("API çağrısı başarısız:", error);
+            }
+        } catch (error) {
+            console.error("İstek başarısız oldu:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Bağlantı Hatası',
+                text: error.message,
             });
-        });
+        }
     });
+
+    // Resim güncelleme işlemi
+    document.getElementById("infPhoto").addEventListener("change", (event) => {
+        console.log("Cover file selected:", event.target.files[0]);
+        const file = event.target.files[0];
+        const previewDiv = document.getElementById("coverPreview");
+
+        if (file && previewDiv) {
+            console.log("Updating preview...");
+            previewDiv.innerHTML = "";
+
+            const img = document.createElement("img");
+            img.src = URL.createObjectURL(file); // Seçilen dosyanın geçici URL'sini oluştur
+            img.style.maxWidth = "200px";
+            img.style.maxHeight = "200px";
+            img.style.objectFit = "cover"; // Görüntü orantılı bir şekilde yerleştirilsin
+
+            previewDiv.appendChild(img); // Resmi previewDiv içine ekle
+        }
+    });
+
 </script>

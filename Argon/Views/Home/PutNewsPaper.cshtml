@@ -2,6 +2,7 @@
 <div class="container mt-5">
 	<h2> Qəzeti Redakte Et</h2>
 	<form id="newspaperForm" enctype="multipart/form-data" >
+        <input type="hidden" name="name" value="NewspaperId" />
 		<div class="mb-3">
 			<label for="NewspaperTitle" class="form-label">Qəzet Başlığı</label>
 			<input type="text" class="form-control" id="NewspaperTitle" name="NewspaperTitle" required placeholder="Qəzet başlığını daxil edin">
@@ -24,14 +25,14 @@
 
 		<div class="mb-3" id="add">
 			<label for="NewspaperCoverUrl" class="form-label">Qəzet Üzqapağı</label>
-			<input type="file" class="form-control" id="NewspaperCoverUrl" name="NewspaperCoverUrl" accept="image/*" required>
+			<input type="file" class="form-control" id="NewspaperCoverFile" name="NewspaperCoverUrl" accept="image/*" >
 			<div id="coverPreview" style="margin-top: 10px;"></div> <!-- Resim önizleme alanı -->
 
 		</div>
 
 		<div class="mb-3" id="addPdf">
 			<label for="NewspaperPdfFile" class="form-label">Qəzet PDF Faylı</label>
-			<input type="file" class="form-control" id="NewspaperPdfFile" name="NewspaperPdfFile" accept="application/pdf" required>
+			<input type="file" class="form-control" id="NewspaperPdfFile" name="NewspaperPdfFile" accept="application/pdf" >
 			<div id="pdfPreview" style="margin-top: 10px;"></div> <!-- PDF ikon önizleme alanı -->
 
 		</div>
@@ -41,113 +42,194 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // 'id'yi URL'den almak
-        const path = window.location.pathname; // /Home/PutNewsPaper/123
-        const id = path.split('/').pop(); // '123' kısmını almak için son elemanı ayırıyoruz
-        console.log("ID: ", id); // id'nin doğru alındığını kontrol edin
+    // 'id'yi URL'den almak
+    const path = window.location.pathname; // /Home/PutNewsPaper/123
+    const id = path.split('/').pop(); // '123' kısmını almak için son elemanı ayırıyoruz
+    console.log("ID: ", id); // id'nin doğru alındığını kontrol edin
 
-        // API'den veri almak için
-        fetch(`https://localhost:44314/api/newspaper/${id}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log("Veri alındı: ", data); // API'den gelen veriyi kontrol et
-                // API'den gelen verileri form elemanlarına yerleştirme
-                if (data) {
-                    document.getElementById("NewspaperTitle").value = data.newspaperTitle;
-                    document.getElementById("NewspaperLinkFlip").value = data.newspaperLinkFlip;
-                    document.getElementById("NewspaperDate").value = data.newspaperDate.split('T')[0]; // Tarih formatı: YYYY-MM-DD
-                    document.getElementById("NewspaperPrice").value = data.newspaperPrice;
+    // API'den veri almak için
+    fetch(`https://localhost:44314/api/newspaper/${id}`)
+    .then(response => response.json())
+    .then(data => {
+        console.log("Veri alındı: ", data); // API'den gelen veriyi kontrol et
+        if (data) {
+            document.getElementById("NewspaperTitle").value = data.newspaperTitle;
+            document.getElementById("NewspaperLinkFlip").value = data.newspaperLinkFlip;
+            document.getElementById("NewspaperDate").value = data.newspaperDate.split('T')[0];
+            document.getElementById("NewspaperPrice").value = data.newspaperPrice;
 
-                    // Üzqapağı (Cover Image) için div oluşturma
-                    const newDiv = document.createElement("div");
-                    newDiv.id = "coverPreview"; // id'yi ayarla
-                    newDiv.style.marginTop = "10px"; // Stil ekle
+            if (data.newspaperCoverUrl) {
+                const newDiv = document.createElement("div");
+                newDiv.id = "coverPreview";
+                newDiv.style.marginTop = "10px";
 
-                    // Yeni div öğesinin içine bir img öğesi ekle
-                    const img = document.createElement("img");
-                    img.src = `https://localhost:44314/${data.newspaperCoverUrl}`; // data.newspaperCoverUrl ile img src'yi ayarlıyoruz
-                    img.style.maxWidth = "200px"; // Resmin boyutunu ayarla
-                    img.style.maxHeight = "200px";
-                    img.style.objectFit = "cover"; // Resmin boyutlarını orantılı hale getir
+                const img = document.createElement("img");
+                img.src = `https://localhost:44314/${data.newspaperCoverUrl}`;
+                img.style.maxWidth = "200px";
+                img.style.maxHeight = "200px";
+                img.style.objectFit = "cover";
 
-                    // img öğesini div içine ekle
-                    newDiv.appendChild(img);
+                newDiv.appendChild(img);
+                document.getElementById("add").appendChild(newDiv);
+            }
 
-                    // Yeni div öğesini sayfadaki belirli bir elemana ekle
-                    document.getElementById("add").appendChild(newDiv);
+            if (data.newspaperPdfUrl) {
+                const newDivPdf = document.createElement("div");
+                newDivPdf.id = "pdfPreview";
+                newDivPdf.style.marginTop = "10px";
 
-                    // PDF dosyasına link eklemek için yeni bir div oluştur
-                    const newDivPdf = document.createElement("div");
-                    newDivPdf.id = "pdfPreview"; // id'yi ayarla
-                    newDivPdf.style.marginTop = "10px"; // Stil ekle
+                const a = document.createElement("a");
+                a.href = `https://localhost:44314/${data.newspaperPdfUrl}`;
+                a.textContent = "PDF'yi İndir";
 
-                    // PDF dosyasına link eklemek için a etiketi oluştur
-                    const a = document.createElement("a");
-                    a.href = `https://localhost:44314/${data.newspaperPdfUrl}`;
-                    a.textContent = "PDF'yi İndir"; // Linke metin ekleyin
+                newDivPdf.appendChild(a);
+                document.getElementById("addPdf").appendChild(newDivPdf);
+            }
+        }
+    })
+    .catch(error => {
+        console.error("API çağrısı başarısız:", error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Bir hata oluştu',
+            text: error.message || 'API çağrısı sırasında bir sorun oluştu.'
+        });
+    });
 
-                    // a etiketini div içine ekleyin
-                    newDivPdf.appendChild(a);
 
-                    // Yeni div öğesini sayfadaki addPdf elementine ekleyin
-                    document.getElementById("addPdf").appendChild(newDivPdf);
-                }
-            })
-            .catch(error => {
-                console.error("API çağrısı başarısız:", error);
-                // Hata durumunda SweetAlert ile kullanıcıyı bilgilendir
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Bir hata oluştu',
-                    text: error.message || 'API çağrısı sırasında bir sorun oluştu.'
-                });
+    // Formu gönderme işlemi
+    document.getElementById("newspaperForm").addEventListener("submit", async (event) => {
+        event.preventDefault(); // Sayfa yenilenmesinin engellenmesi
+        const formData = new FormData(event.target);
+
+        // Fotoğraf ve PDF dosyalarının da ekli olduğundan emin olun
+        const coverFile = document.getElementById("NewspaperCoverFile").files[0];
+        const pdfFile = document.getElementById("NewspaperPdfFile").files[0];
+
+        if (coverFile) {
+            formData.append("NewspaperCoverFile", coverFile); // Dosyayı formData'ya ekle
+        }
+        if (pdfFile) {
+            formData.append("NewspaperPdfFile", pdfFile); // PDF dosyasını formData'ya ekle
+        }
+
+        try {
+            const response = await fetch(`https://localhost:44314/api/newspaper/edit/${id}`, {
+                method: "PUT",
+                body: formData
             });
 
-        // Formu gönderme işlemi
-        document.getElementById("updateForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Sayfa yenilenmesinin engellenmesi
-
-            const updatedNews = {
-                newspaperTitle: document.getElementById("NewspaperTitle").value,
-                newspaperLinkFlip: document.getElementById("NewspaperLinkFlip").value,
-                newspaperDate: document.getElementById("NewspaperDate").value,
-                newspaperPrice: document.getElementById("NewspaperPrice").value,
-                newspaperStatus: document.getElementById("NewspaperStatus").checked, // Checkbox ise true/false
-                newspaperCoverUrl: document.getElementById("NewspaperCoverUrl").value, // Resim URL'si
-                newspaperPdfUrl: document.getElementById("NewspaperPdfFile").value // PDF URL'si
-            };
-
-            console.log("Gönderilen Veri: ", updatedNews); // Gönderilen veriyi kontrol et
-
-            // PUT isteği göndermek için
-            fetch(`https://localhost:44314/api/newspaper/edit/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updatedNews)
-            })
-            .then(response => response.json())
-            .then(result => {
-                console.log("API Yanıtı:", result); // Yanıtın tamamını logla
+            if (response.ok) {
+                const result = await response.json();
                 Swal.fire({
                     icon: 'success',
-                    title: 'Başarılı!',
-                    text: result.Message || 'Haber başarıyla güncellendi.'
+                    title: 'Başarıyla Güncellendi!',
+                    text: 'Gazete başarıyla güncellendi.',
+                }).then(() => {
+                    // Başarıyla güncelleme işlemi tamamlandığında yönlendirme
+                    window.location.href = "/home/NewsPaper"; // Yeni sayfaya yönlendirme
                 });
-            })
-            .catch(error => {
-                // SweetAlert2 ile hata mesajı göster
+            } else {
+                const errorText = await response.text();
                 Swal.fire({
                     icon: 'error',
-                    title: 'Bir hata oluştu',
-                    text: error.message || 'API çağrısı başarısız oldu.'
+                    title: 'Hata!',
+                    text: errorText,
                 });
-                // Hata mesajını konsola yazdır
-                console.error("API çağrısı başarısız:", error);
+            }
+        } catch (error) {
+            console.error("İstek başarısız oldu:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Bağlantı Hatası',
+                text: error.message,
             });
+        }
+    });
+
+    // Resim güncelleme işlemi
+    document.getElementById("NewspaperCoverFile").addEventListener("change", (event) => {
+        console.log("Cover file selected:", event.target.files[0]);
+        const file = event.target.files[0];
+        const previewDiv = document.getElementById("coverPreview");
+
+        if (file && previewDiv) {
+            console.log("Updating preview...");
+            previewDiv.innerHTML = "";
+
+            const img = document.createElement("img");
+            img.src = URL.createObjectURL(file); // Seçilen dosyanın geçici URL'sini oluştur
+            img.style.maxWidth = "200px";
+            img.style.maxHeight = "200px";
+            img.style.objectFit = "cover"; // Görüntü orantılı bir şekilde yerleştirilsin
+
+            previewDiv.appendChild(img); // Resmi previewDiv içine ekle
+        }
+    });
+
+    // PDF dosyası seçildiğinde önizleme güncelleme
+    document.getElementById("NewspaperPdfFile").addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        const previewDivPdf = document.getElementById("pdfPreview");
+
+        if (file && previewDivPdf) {
+            // Önce eski içeriği temizleyin
+            previewDivPdf.innerHTML = "";
+
+            // PDF dosyasının bağlantısını oluşturun
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(file); // PDF dosyasının geçici URL'si
+            a.textContent = "Seçilen PDF'yi Görüntüle"; // Bağlantı metni
+            a.target = "_blank"; // Bağlantıya tıklandığında yeni sekmede açılmasını sağlar
+
+            // PDF bağlantısını previewDivPdf içine ekleyin
+            previewDivPdf.appendChild(a);
+        }
+    });
+
+    // Silme işlemi için SweetAlert ile uyarı
+    document.getElementById("deleteBtn").addEventListener("click", () => {
+        Swal.fire({
+            title: 'Emin misiniz?',
+            text: "Bu işlemi geri alamazsınız!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Evet, sil!',
+            cancelButtonText: 'Hayır, iptal et!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`https://localhost:44314/api/newspaper/delete/${id}`, {
+                    method: 'DELETE',
+                })
+                .then(response => {
+                    if (response.ok) {
+                        Swal.fire(
+                            'Silindi!',
+                            'Gazete başarıyla silindi.',
+                            'success'
+                        ).then(() => {
+                            window.location.href = "/home/NewsPaper"; // Silme sonrası yönlendirme
+                        });
+                    } else {
+                        Swal.fire(
+                            'Hata!',
+                            'Silme işlemi başarısız oldu.',
+                            'error'
+                        );
+                    }
+                })
+                .catch(error => {
+                    Swal.fire(
+                        'Hata!',
+                        'Bir hata oluştu.',
+                        'error'
+                    );
+                });
+            }
         });
     });
 </script>

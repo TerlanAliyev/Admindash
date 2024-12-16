@@ -45,6 +45,8 @@
                     icon: 'success',
                     title: 'Uğurlu əməliyyat',
                     text: "Kateqoriya uğurla əlavə edildi",
+                }).then(() => {
+                    window.location.href = "/home/Infographics"; // Başarı sonrası yönlendirme
                 });
             } else {
                 const errorText = await response.text();
